@@ -16,6 +16,8 @@ const path = require("path");
 
 
 const { WebhookClient } = require("dialogflow-fulfillment");
+let  strPDF='';
+
 
 
 app.get("/", (req, res) => {
@@ -28,7 +30,9 @@ app.post("/", express.json(), (req, res) => {
 
   async function generatePdfAndSendEmail(html,maillist) {
     // Launch a headless browser
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: 'new'
+    });
     const page = await browser.newPage();
   
     // Set the content of the page to the HTML string
@@ -92,7 +96,7 @@ app.post("/", express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res });
 
   //THIS IS THE CV INCASE YOU WANT TO CHANGE IT IN THE FUTURE
-  function myCvAttach(email,fullname,pnumber,birthdate,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender) {
+  function myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender) {
   
     let  cv =`<!DOCTYPE html>
     <html>
@@ -347,7 +351,7 @@ app.post("/", express.json(), (req, res) => {
       
       <div class="about skills">
       <h2 class="title2">Personal Details</h2>
-      -<b>Date Of Birth</b>: ${birthdate}<br>-<b>Gender</b>: ${gender}<br>-<b>License</b>:${driverscodes}<br>-<b>Nationality</b>: ${nationality}<br>-<b>Province </b>${provinces}<br>-<b>Online Profile/Portfolio</b>: ${url}
+      -<b>Gender</b>: ${gender}<br>-<b>License</b>:${driverscodes}<br>-<b>Nationality</b>: ${nationality}<br>-<b>Province </b>${provinces}<br>-<b>Online Profile/Portfolio</b>: ${url}
     </div>
     
     
@@ -392,12 +396,11 @@ app.post("/", express.json(), (req, res) => {
     
     
     //VARIABLE FOR EMPLOYER EMAIL 
-    let empmail = req.body.queryResult.parameters['empmail'];
+    
     
     //VARIABLE FOR BUILDING CV
     let fullname = req.body.queryResult.parameters['fullname'];
-    let provinces =req.body.queryResult.parameters['provinces'];
-    let o_birthdate = req.body.queryResult.parameters['birthdate'];
+    let provinces =req.body.queryResult.parameters['provincegb'];  
     let pnumber = req.body.queryResult.parameters['pnumber'];
     let workexp = req.body.queryResult.parameters['workexp'];
     let workpersonality = agent.parameters['workpersonality'];
@@ -413,24 +416,23 @@ app.post("/", express.json(), (req, res) => {
     let about= req.body.queryResult.parameters['about'];
     let gender= req.body.queryResult.parameters['gender'];
     
-    var birthdate = o_birthdate.substring(0, 10);  //.substring(0, 10)
     var url;
     
     if(url_ori=='none.com'){
-      url=' Not Applicable';
+      url=' N/A';
     }
 
-    let  strPDF =myCvAttach(email,fullname,pnumber,birthdate,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender);
+    strPDF =myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender);
     
 
 
   
-    var maillist = [
-    empmail,
-    email,
-    ];
+    // var maillist = [
+    // empmail,
+    // email,
+    // ];
 
-    generatePdfAndSendEmail(strPDF,maillist);
+ //   generatePdfAndSendEmail(strPDF,maillist);
 
  	  // create reusable transporter object using the default SMTP transport
   	 
@@ -439,10 +441,13 @@ app.post("/", express.json(), (req, res) => {
       
 
     const response ='Thank you for creating a CV using SoftMeeet CV builder Bot. The CV is complete, check your email address.';
-      
+    
 
     agent.add(response);
   }
+  
+  
+  
   async function sayHello(agent) {
 
 
@@ -451,17 +456,44 @@ app.post("/", express.json(), (req, res) => {
       agent.add(HelloRes);
 
   }
+
+  async function sendcv(agent){
+
+    console.log(strPDF);
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+    let eMail = req.body.queryResult.parameters['eMail'];
+    generatePdfAndSendEmail(strPDF,eMail);
+    const fRes=`Thank your for using Softmeet CV builder 😁`;
+      
+    agent.add(fRes);
+
+    
+  }
   
 
+  async function sendtoself(agent){
+
+    
+    let pMail = req.body.queryResult.parameters['pMail'];
+    generatePdfAndSendEmail(strPDF,pMail);
+    const fRes=`Thank your for using Softmeet CV builder 😁`;
+      
+    agent.add(fRes);
+
+    
+  }
+  
 
   const intentMap = new Map();
   intentMap.set("buildresume", buildresume);
   intentMap.set("sayHello", sayHello);
-  
+  intentMap.set("sendcv",sendcv); //sendtoself
+  intentMap.set("sendtoself",sendtoself); //sendtoself
+
   agent.handleRequest(intentMap);
 });
 
 app.listen(8080, () => {
-  console.log("server running...");
+  console.log("server running...on port 8080");
 });
 
