@@ -96,293 +96,460 @@ app.post("/", express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res });
 
   //THIS IS THE CV INCASE YOU WANT TO CHANGE IT IN THE FUTURE
-  function myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender) {
+  function myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skill_1, skill_2, skill_3,workexp,url,workpersonality_1, workpersonality_2, workpersonality_3,driverscodes,languages_1, languages_2, languages_3,nationality,gender) {
   
     let  cv =`<!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Curriculum Vitae</title>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <style>
-            
-    @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
-    *
-    {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    }
-    body
-    {
+    @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap");
     
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      list-style: none;
+      font-family: "Montserrat", sans-serif;
+    }
     
+    body {
+      /* background: #585c68; */
+      font-size: 14px;
+      line-height: 22px;
+      color: #555555;
     }
-    .container
-    {
-        // position: relative;
-        width: 100%;
-        max-width: 1000px;
-        min-height: 1000px;
-        
-        margin-left: 50px;
-        align-items:center;
-        align:center;
-     
+    
+    .bold {
+      font-weight: 700;
+      font-size: 20px;
+      /* text-transform: uppercase; */
     }
-    .container .left_Side
-    {
-        // position: relative;
-        background: #808080;
-        padding: 15px;
-        margin-left:20%;
-  
+    
+    .semi-bold {
+      font-weight: 500;
+      font-size: 16px;
     }
-    .profileText
-    {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        // padding-bottom: 10px;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
+    
+    .resume {
+      width: 800px;
+      height: auto;
+      display: flex;
+      margin: 50px auto;
     }
-    .profileText .imgBx
-    {
-       position: relative;
-       width: 200px;
-       height: 200px;
-       border-radius: 50%;
-       overflow: hidden; 
+    
+    .resume .resume_left {
+      width: 280px;
+      background: white;
     }
-    .profileText .imgBx img
-    {
+    
+    .resume .resume_left .resume_profile {
+      width: 100%;
+      height: 280px;
+    }
+    
+    .resume .resume_left .resume_profile img {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .resume .resume_left .resume_content {
+      padding: 0 25px;
+    }
+    
+    .resume .title {
+      margin-bottom: 20px;
+    }
+    
+    .resume .resume_left .bold {
+      color: #0bb5f4;
+    }
+    
+    .resume .resume_left .regular {
+      color: #b1eaff;
+    }
+    .skill_name li{
+      font-weight:600;
+    }
+    .resume .resume_item {
+      padding: 25px 0;
+      border-bottom: 2px solid #b1eaff;
+    }
+    
+    .resume .resume_left .resume_item:last-child,
+    .resume .resume_right .resume_item:last-child {
+      border-bottom: 0px;
+    }
+    
+    .resume .resume_left ul li {
+      display: flex;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    
+    .resume .resume_left ul li:last-child {
+      margin-bottom: 0;
+    }
+    
+    .resume .resume_left ul li .icon {
+      width: 35px;
+      height: 35px;
+      background: #fff;
+      color: #0bb5f4;
+      border-radius: 50%;
+      margin-right: 15px;
+      font-size: 16px;
+      position: relative;
+    }
+    
+    .resume .icon i,
+    .resume .resume_right .resume_hobby ul li i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .resume .resume_left ul li .data {
+      color: black;
+    }
+    
+    .data{
+      font-weight: 500;
+    }
+    .resume .resume_left .resume_skills ul li {
+      display: flex;
+      margin-bottom: 10px;
+      color: #b1eaff;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .resume .resume_left .resume_skills ul li .skill_name {
+      width: 25%;
+      color:black;
+    }
+    
+    .resume .resume_left .resume_skills ul li .skill_progress {
+      width: 60%;
+      margin: 0 5px;
+      height: 5px;
+      background: #009fd9;
+      position: relative;
+    }
+    
+    .resume .resume_left .resume_skills ul li .skill_per {
+      width: 15%;
+    }
+    
+    .resume .resume_left .resume_skills ul li .skill_progress span {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
       height: 100%;
-      object-fit: cover;
+      background: #fff;
     }
-    .profileText h2
-    {
-        color: #fff;
-        font-size: 1.5em;
-        margin-top: 20px;
-        text-transform: uppercase;
-        text-align: center;
-        font-weight: 600;
-        line-height: 1.4em;
-    }
-    .profileText h2 span
-    {
-        font-size: 0.8em;
-        font-weight: 300;
-    }
-    .contactInfo
-    {
-        padding-top: 8px;
-    }
-    .title
-    {
-        color:#fff;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
-    }
-    .contactInfo ul
-    {
-        position: relative;
-    }
-    .contactInfo ul li
-    {
-        position: relative;
-        list-style: none;
-        margin: 10px 0;
-        cursor: pointer;
-    }
-    .contactInfo ul li .icon
-    {
-        display: inline-block;
-        width: 30px;
-        font-size: 15px;
-        color: #03a9f4;
-    }
-    .container ul li span
-    {
-        color:#fff;
-        font-weight: 300;
-    }
-    .education li
-    {
-        margin-bottom: 15px;
-    }
-    .education h5
-    {
-        color: #03a9f4;
-        font-weight: 500;
-    }
-    .education h4:nth-child(2)
-    {
-        color: #fff;
-        font-weight: 500;
-    }
-    .education h4
-    {
-        color: #fff;
-        font-weight: 300;
-    }
-    .container .right_Side
-    {
-        position: relative;
-        background: #fff;
-        padding: 30px;
-    }
-    .about
-    {
-        margin-bottom: 30px;
-    }
-    .about:last-child
-    {
-        margin-bottom: 0;
-    }
-    .title2
-    {
-        color:#003147;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
     
+    .resume .resume_left .resume_social .semi-bold {
+      color: #fff;
+      margin-bottom: 3px;
     }
-    p
-    {
-        color: #333;
+    
+    .resume .resume_right {
+      width: 520px;
+      background: #fff;
+      padding: 25px;
     }
-    .about .box
-    {
-        display: flex;
-        flex-direction: row;
-        margin: 20px 0;
+    
+    .resume .resume_right .bold {
+      color: #0bb5f4;
     }
-    .about .box .year_company
-    {
-        min-width: 150px;
+    
+    .resume .resume_right .resume_work ul,
+    .resume .resume_right .resume_education ul {
+      padding-left: 40px;
+      overflow: hidden;
     }
-    .about .box .year_company h5
-    {
-        text-transform: uppercase;
-        color: #848c90;
-        font-weight: 600;
-    }
-    .about .box .text h4
-    {
-        text-transform: uppercase;
-        color: #2a7da2;
-        font-size: 16px;
-    }
-    .skills .box
-    {
+    
+    .resume .resume_right ul li {
       position: relative;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      justify-content: center;
-      align-items: center;
-    }
-    .skills .box h4
-    {
-      text-transform: uppercase;
-      color: #848c99;
-      font-weight: 500;
-    }
-    .row
-    {
-        
-        
     }
     
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive CV using HTML & CSS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="style.css">
+    .resume .resume_right ul li .date {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+    
+    .resume .resume_right ul li .info {
+      margin-bottom: 20px;
+    }
+    
+    .resume .resume_right ul li:last-child .info {
+      margin-bottom: 0;
+    }
+    
+    .resume .resume_right .resume_work ul li:before,
+    .resume .resume_right .resume_education ul li:before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: -25px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: 2px solid #0bb5f4;
+    }
+    
+    .resume .resume_right .resume_work ul li:after,
+    .resume .resume_right .resume_education ul li:after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: -21px;
+      width: 2px;
+      height: 115px;
+      background: #0bb5f4;
+    }
+    
+    .resume .resume_right .resume_hobby ul {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .resume .resume_right .resume_hobby ul li {
+      width: 80px;
+      height: 80px;
+      border: 2px solid #0bb5f4;
+      border-radius: 50%;
+      position: relative;
+      color: #0bb5f4;
+    }
+    
+    .resume .resume_right .resume_hobby ul li i {
+      font-size: 30px;
+    }
+    
+    .resume .resume_right .resume_hobby ul li:before {
+      content: "";
+      position: absolute;
+      top: 40px;
+      right: -52px;
+      width: 50px;
+      height: 2px;
+      background: #0bb5f4;
+    }
+    
+    .resume .resume_right .resume_hobby ul li:last-child:before {
+      display: none;
+    }
     
     
+        </style>
     
     </head>
-    
     <body>
-    <div class="container">
-    <div class="left_Side">
-    <div class= "ProfileText">
     
-    <h2 style="">Resume Of <br> ${fullname}</h2>
-    </div>
     
-    <div class="contactInfo">
-    <h3 class="title"  >Contact Info</h3>
-    
-        <div class="row" >
-            
-                <span class="icon" ><i class="fa fa-phone" aria-hidden="true"></i>
-                </span>
-                <span class="text">${pnumber}</span>
-            
-            
-                <span class="icon" style="";><i class="fa fa-envelope-o" aria-hidden="true"></i>
-                </span>
-                <span class="text">${email}</span>
+         <div class="resume">
+          <div class="resume_left">
            
-                
-           
-        </div>
-    
-    </div>
-    
-    </div>
-    
-    <div class="right_Side">
-      <div class="about">
-        <h2 class="title2">Profile</h2>
-        <p>
-            ${about}
-        </p>
-      </div>
-    
-      
-      <div class="about skills">
-      <h2 class="title2">Personal Details</h2>
-      -<b>Gender</b>: ${gender}<br>-<b>License</b>:${driverscodes}<br>-<b>Nationality</b>: ${nationality}<br>-<b>Province </b>${provinces}<br>-<b>Online Profile/Portfolio</b>: ${url}
-    </div>
-    
-    
-      <div class="about skills">
-      <h2 class="title2">Academic Record</h2>
-      -${institution}<br>-${qualifications}
-    </div>
-    
-      
-      
-      <div class="about">
-        <h2 class="title2">Employment History</h2>
-            <div class="box">
-                <div class="text">
-                    <p>${workexp}</p>
+            <div class="resume_content">
+              <div class="resume_item resume_info">
+                <div class="title">
+                  <p class="bold">${fullname.name}</p>
+                  <!-- <p class="regular">Software Engineer</p> -->
                 </div>
-            </div>
-        <div class="about skills">
-          <h2 class="title2">Skills</h2>
-          -${skills}<br>-${workpersonality}
-        </div>
+                <ul>
+                  <li>
+                    <div class="icon">
+                      <i class='bx bxs-directions'></i>
+                    </div>
+                    <div class="data">
+                    ${provinces} <br />
+                    </div>
+                  </li>
+                  <li>
+                    <div class="icon">
+                      <i class='bx bxs-phone-call'></i>
+                    </div>
+                    <div class="data">
+                      ${pnumber}
+                    </div>
+                  </li>
+                  <li>
+                    <div class="icon">
+                      <i class='bx bxs-envelope' ></i>
+                    </div>
+                    <div class="data">
+                    ${email}
+                      
+                    </div>
+                  </li>
+                  <li>
+                     <div class="icon">
+                     <i class='bx bxs-id-card'></i>
+                    </div> 
+                     <div class="data">
+                      ${driverscodes}
+                    </div>
+                  </li>
     
-        <div class="about skills">
-          <h2 class="title2">Languages</h2>
-          English,${languages}
-      </div>
+                  <li>
+                    <div class="icon">
+                      <i class='bx bxs-flag-alt'></i>
+                   </div> 
+                    <div class="data">
+                     ${nationality}
+                   </div>
     
+                 </li>
+                 <li>
+                 <div class="icon">
+                  <i class='bx bx-extension'></i>
+               </div> 
+                <div class="data">
+                 ${gender}
+               </div>
+                 </li>
+                </ul>
+              </div>
+              <div class="resume_item resume_skills">
+                <div class="title">
+                  <p class="bold">Skills </p>
+                </div>
+                <ul>
+                  <li>
+                    <div class="skill_name">
+                      -${skill_1}
+                   
+                    
+                  </li>
+                  <li>
+                    <div class="skill_name">
+                      -${skill_2}
+                   
+                    
+                  </li>
+                  <li>
+                    <div class="skill_name">
+                      -${skill_3}
+                    </div>
+                   
+                  
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="resume_item resume_social">
+                 <div class="title">
+                  <p class="bold">Languages </p>
+                  
+                </div>
+                <ul>
+                  <li>
+                    
+                    <div class="data">
+                      
+                      ${languages_1}
+                    </div>
+                  </li>
+                  <li>
+                  
+                    <div class="data">
+                      ${languages_2}
+                    </div>
+                  </li>
+                  <li>
+                  
+                    <div class="data">
+                      ${languages_3}
+                    </div>
+                  </li>
+                
+                
+                </ul> 
+              </div>
+            </div> 
+         </div>
+         <div class="resume_right">
+           <div class="resume_item resume_about">
+               <div class="title">
+                  <p class="bold">Professional Summary</p>
+                </div>
+               <p>
+                ${fullname.name} is an Aspiring.....${fullname.name} always believes 
+                that his/her hands-on experience coupled with the growing knowledge he/she gained during 
+                his/her studies and during field work prepared his/her to can make a solid contribution in any....${fullname.name} is a 
+                self-motivated, goal orientated, driven and an individual who believes in lifting and 
+                empowering others, through the knowledge she has acquired, and experiences gained,
     
-      </div> 
-    </div>
-    </div>
+                ${about}
+    
+               </p>
+           <div class="resume_item resume_work">
+               <div class="title">
+                  <p class="bold">Employment History</p>
+                </div>
+               <ul>
+                   <li>
+                       <div class="date">${workexp}</div> 
+                       
+                       <div class="info">
+                           
+                       </div>
+                   </li>
+                
+                   <li>
+                  
+                    
+               
+               <div class="title">
+                <p class="bold">Interpersonal Skills</p>
+              </div>
+              <li>
+                <div class="date">${workpersonality_1}</div> 
+                <div class="date">${workpersonality_2}</div> 
+                <div class="date">${workpersonality_3}</div> 
+                <div class="info">
+                    
+                </div>
+            </li>
+          </ul>
+           </div>
+           <div class="resume_item resume_education">
+             <div class="title">
+                  <p class="bold">Education</p>
+                </div>
+             <ul>
+              <li>
+                <div class="date">${institution}</div> 
+                <div class="info">
+                   
+                     <p class="semi-bold">${qualifications}</p> 
+                </div>
+            </li>
+       <li>
+                     <div class="date">URL</div>
+                     <div class="info">
+                            <p>${url}</p> 
+                         
+                       </div>
+                   </li>
+               </ul>
+           </div>
+           <div class="resume_item resume_hobby">
+            
+           </div>
+         </div>
+       </div>
+    
+         <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+         <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     </body>
     </html>`;
     
@@ -399,6 +566,9 @@ app.post("/", express.json(), (req, res) => {
     
     
     //VARIABLE FOR BUILDING CV
+    //provincegb
+  
+
     let fullname = req.body.queryResult.parameters['fullname'];
     let provinces =req.body.queryResult.parameters['provincegb'];  
     let pnumber = req.body.queryResult.parameters['pnumber'];
@@ -417,12 +587,57 @@ app.post("/", express.json(), (req, res) => {
     let gender= req.body.queryResult.parameters['gender'];
     
     var url;
+
+
+     
     
+    console.log(`${fullname.name} + okay ${fullname}`)
     if(url_ori=='none.com'){
       url=' N/A';
     }
 
-    strPDF =myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skills,workexp,url,workpersonality,driverscodes,languages,nationality,gender);
+    //For Skills
+    const valuesArray = skills.toString().split(',');
+    let [skill_1, skill_2, skill_3] = valuesArray;
+
+    if (skill_1==null){
+
+      skill_1='';
+     }else if(skill_2==null){
+  
+      skill_2='';
+     }else if(skill_3== null){
+  
+      skill_3='';
+     }
+  
+  
+
+    //For Work Personality
+    const valuesArr = workpersonality.toString().split(',');
+    let [workpersonality_1, workpersonality_2, workpersonality_3] = valuesArr;
+
+
+
+
+    //For Languague
+
+    const valuesArr_ = languages.toString().split(',');
+    let [languages_1, languages_2, languages_3] = valuesArr_;
+
+   if (languages_1==null){
+
+    languages_1='';
+   }else if(languages_2==null){
+
+    languages_2='';
+   }else if(languages_3== null){
+
+    languages_3='';
+   }
+
+
+    strPDF =myCvAttach(email,fullname,pnumber,provinces,institution, qualifications,about,skill_1, skill_2, skill_3,workexp,url,workpersonality_1, workpersonality_2, workpersonality_3,driverscodes,languages_1, languages_2, languages_3,nationality,gender);
     
 
 
@@ -440,7 +655,7 @@ app.post("/", express.json(), (req, res) => {
  
       
 
-    const response ='Thank you for creating a CV using SoftMeeet CV builder Bot. The CV is complete, check your email address.';
+    const response ='This is the final step. Note: Sending an email to the employer directly might carry some risks.';
     
 
     agent.add(response);
